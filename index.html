@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nudge - Your Desktop Health Companion</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Background Atmosphere -->
+  <div class="bg-atmosphere">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="main-header">
+    <div class="header-inner">
+      <a href="#" class="logo" data-tab="dashboard">
+        <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 8v8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="3" fill="currentColor"/>
+        </svg>
+        <span>Nudge</span>
+      </a>
+
+      <nav class="main-nav">
+        <button class="nav-item active" data-tab="dashboard">Dashboard</button>
+        
+        <div class="nav-dropdown">
+          <button class="nav-item">
+            Focus
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <button data-tab="pomodoro">Pomodoro Timer</button>
+            <button data-tab="alarm">Quick Alarm</button>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <button class="nav-item">
+            Health
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <button data-tab="medicine">Medicine Reminder</button>
+            <button data-tab="water">Water Intake</button>
+            <button data-tab="breathing">Box Breathing</button>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <button class="nav-item">
+            Wellness
+            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <button data-tab="eyecare">Eye Care</button>
+            <button data-tab="posture">Posture & Movement</button>
+          </div>
+        </div>
+      </nav>
+
+      <button class="notification-btn" id="notificationBtn" aria-label="View notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="notification-indicator" id="notificationIndicator"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Notification Panel -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="panel-header">
+      <h3>Active Reminders</h3>
+      <button class="close-panel" id="closePanel" aria-label="Close panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div class="panel-content" id="panelContent">
+      <div class="panel-section">
+        <h4>Upcoming</h4>
+        <ul id="upcomingList" class="reminder-list">
+          <li class="empty-state">No upcoming reminders</li>
+        </ul>
+      </div>
+      <div class="panel-section">
+        <h4>Currently Active</h4>
+        <ul id="activeList" class="reminder-list">
+          <li class="empty-state">No active reminders</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Dashboard Tab -->
+    <section class="tab-content active" id="dashboard">
+      <div class="dashboard-header">
+        <h1>Welcome Back</h1>
+        <p>Your daily wellness summary</p>
+      </div>
+
+      <!-- Daily Progress -->
+      <div class="progress-card">
+        <div class="progress-ring-container">
+          <svg class="progress-ring" viewBox="0 0 200 200">
+            <circle class="progress-bg" cx="100" cy="100" r="85"/>
+            <circle class="progress-fill" cx="100" cy="100" r="85" id="dailyProgressRing"/>
+          </svg>
+          <div class="progress-text">
+            <span class="progress-value" id="dailyProgressValue">0%</span>
+            <span class="progress-label">Daily Goals</span>
+          </div>
+        </div>
+        <div class="progress-stats">
+          <div class="stat-item">
+            <span class="stat-value" id="statWater">0/8</span>
+            <span class="stat-label">Water Glasses</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="statPomodoro">0</span>
+            <span class="stat-label">Focus Sessions</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="statMedicine">0</span>
+            <span class="stat-label">Medicines Taken</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Focus Mode -->
+      <div class="feature-card smart-focus-card">
+        <div class="card-header">
+          <h3>Smart Focus Mode</h3>
+          <label class="toggle-switch">
+            <input type="checkbox" id="smartFocusToggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <p class="card-description">
+          When you start a Pomodoro session, this automatically pauses less critical nudges (Blink, Posture, Stand Up) so you can focus deeply. They resume during your breaks.
+        </p>
+        <div class="focus-status" id="focusStatus">
+          <span class="status-dot"></span>
+          <span class="status-text">Inactive - All nudges active</span>
+        </div>
+      </div>
+
+      <!-- Quick Access Grid -->
+      <div class="quick-access-grid">
+        <!-- Water Quick Card -->
+        <div class="feature-card quick-card">
+          <div class="card-icon water-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
+            </svg>
+          </div>
+          <h4>Water Intake</h4>
+          <div class="water-display">
+            <span id="quickWaterCount">0</span>/8 glasses
+          </div>
+          <button class="btn-primary btn-sm" id="quickAddWater">Add Glass</button>
+        </div>
+
+        <!-- Pomodoro Quick Card -->
+        <div class="feature-card quick-card">
+          <div class="card-icon focus-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h4>Pomodoro</h4>
+          <div class="timer-mini" id="quickTimerDisplay">25:00</div>
+          <button class="btn-primary btn-sm" id="quickStartPomodoro">Start Focus</button>
+        </div>
+
+        <!-- Quick Reminders Toggle Card -->
+        <div class="feature-card quick-card toggles-card">
+          <h4>Quick Toggles</h4>
+          <div class="toggle-list">
+            <div class="toggle-row">
+              <span>Blink Reminder</span>
+              <label class="toggle-switch toggle-sm">
+                <input type="checkbox" id="toggleBlink">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <span>Posture Check</span>
+              <label class="toggle-switch toggle-sm">
+                <input type="checkbox" id="togglePosture">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <span>Stand Up</span>
+              <label class="toggle-switch toggle-sm">
+                <input type="checkbox" id="toggleStandUp">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Alarm Card -->
+        <div class="feature-card quick-card">
+          <div class="card-icon alarm-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+          </div>
+          <h4>Quick Alarm</h4>
+          <div class="quick-alarm-input">
+            <input type="number" id="quickAlarmMinutes" placeholder="Minutes" min="1" max="480">
+            <button class="btn-secondary btn-sm" id="quickSetAlarm">Set</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pomodoro Tab -->
+    <section class="tab-content" id="pomodoro">
+      <div class="page-header">
+        <h2>Pomodoro Timer</h2>
+        <p>Focus for 25 minutes, then take a 5 minute break.</p>
+      </div>
+
+      <div class="feature-card timer-card">
+        <div class="duration-selector">
+          <button class="duration-btn active" data-duration="25">Focus 25m</button>
+          <button class="duration-btn" data-duration="15">Focus 15m</button>
+          <button class="duration-btn" data-duration="5">Break 5m</button>
+        </div>
+
+        <div class="timer-display-container">
+          <svg class="timer-ring" viewBox="0 0 256 256">
+            <circle class="timer-bg" cx="128" cy="128" r="110"/>
+            <circle class="timer-fill" cx="128" cy="128" r="110" id="pomodoroRing"/>
+          </svg>
+          <div class="timer-text">
+            <span class="timer-value" id="pomodoroDisplay">25:00</span>
+            <span class="timer-label" id="pomodoroLabel">Focus Time</span>
+          </div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="btn-primary" id="pomodoroStart">Start</button>
+          <button class="btn-secondary" id="pomodoroPause" disabled>Pause</button>
+          <button class="btn-secondary" id="pomodoroReset">Reset</button>
+        </div>
+
+        <div class="session-stats">
+          <div class="session-stat">
+            <span class="session-value" id="sessionsCompleted">0</span>
+            <span class="session-label">Sessions Today</span>
+          </div>
+          <div class="session-stat">
+            <span class="session-value" id="totalFocusTime">0</span>
+            <span class="session-label">Minutes Focused</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Alarm Tab -->
+    <section class="tab-content" id="alarm">
+      <div class="page-header">
+        <h2>Quick Alarm</h2>
+        <p>Set a one-time reminder for anything.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="form-group">
+          <label for="alarmLabel">Reminder Label</label>
+          <input type="text" id="alarmLabel" placeholder="e.g., Check the oven, Call back...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="alarmTime">Time</label>
+            <input type="time" id="alarmTime">
+          </div>
+          <div class="form-group">
+            <label for="alarmMinutes">Or Minutes From Now</label>
+            <input type="number" id="alarmMinutes" placeholder="Minutes" min="1" max="480">
+          </div>
+        </div>
+        <button class="btn-primary" id="setAlarmBtn">Set Reminder</button>
+      </div>
+
+      <div class="alarms-list" id="alarmsList">
+        <!-- Generated alarms appear here -->
+      </div>
+    </section>
+
+    <!-- Medicine Tab -->
+    <section class="tab-content" id="medicine">
+      <div class="page-header">
+        <h2>Medicine Reminder</h2>
+        <p>Never miss a dose. Set recurring reminders.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Add New Medicine</h3>
+        <div class="form-group">
+          <label for="medName">Medicine Name</label>
+          <input type="text" id="medName" placeholder="e.g., Vitamin D">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="medDosage">Dosage</label>
+            <input type="text" id="medDosage" placeholder="e.g., 1 tablet">
+          </div>
+          <div class="form-group">
+            <label for="medTime">Time</label>
+            <input type="time" id="medTime">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="medFrequency">Frequency</label>
+          <select id="medFrequency">
+            <option value="daily">Daily</option>
+            <option value="twice">Twice Daily</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <button class="btn-primary" id="addMedicineBtn">Add Reminder</button>
+      </div>
+
+      <div class="medicine-list" id="medicineList">
+        <!-- Generated medicines appear here -->
+      </div>
+
+      <div class="info-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4"/>
+          <path d="M12 8h.01"/>
+        </svg>
+        <p>Keep this tab open for reminders to work. Click the notification permission request when prompted.</p>
+        <button class="btn-secondary btn-sm" id="enableNotifBtn">Enable Notifications</button>
+      </div>
+    </section>
+
+    <!-- Water Tab -->
+    <section class="tab-content" id="water">
+      <div class="page-header">
+        <h2>Water Intake</h2>
+        <p>Stay hydrated. Aim for 8 glasses a day.</p>
+      </div>
+
+      <div class="feature-card water-card">
+        <div class="water-visual">
+          <div class="water-count-large" id="waterCountLarge">0</div>
+          <span class="water-goal">of 8 glasses</span>
+        </div>
+
+        <div class="water-drops" id="waterDrops">
+          <!-- 8 water drops generated by JS -->
+        </div>
+
+        <div class="water-actions">
+          <button class="btn-primary" id="addWaterBtn">Add Glass</button>
+          <button class="btn-secondary" id="removeWaterBtn">Remove</button>
+          <button class="btn-secondary" id="resetWaterBtn">Reset</button>
+        </div>
+
+        <div class="water-reminder">
+          <label for="waterInterval">Remind me every:</label>
+          <select id="waterInterval">
+            <option value="30">30 minutes</option>
+            <option value="60" selected>1 hour</option>
+            <option value="90">1.5 hours</option>
+            <option value="120">2 hours</option>
+          </select>
+          <button class="btn-secondary btn-sm" id="waterRemindBtn">Start Reminders</button>
+        </div>
+      </div>
+
+      <div class="water-history feature-card">
+        <h4>Today's Log</h4>
+        <ul id="waterHistoryList">
+          <li class="empty-state">No water logged yet</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Box Breathing Tab -->
+    <section class="tab-content" id="breathing">
+      <div class="page-header">
+        <h2>Box Breathing</h2>
+        <p>A powerful stress relief technique. Breathe in, hold, exhale, hold - each for 4 seconds.</p>
+      </div>
+
+      <div class="feature-card breathing-card">
+        <div class="breathing-box" id="breathingBox">
+          <span id="breathingText">Ready</span>
+        </div>
+
+        <div class="breathing-controls">
+          <button class="btn-primary" id="startBreathing">Start Session</button>
+          <button class="btn-secondary" id="stopBreathing" disabled>Stop</button>
+        </div>
+
+        <div class="breathing-guide">
+          <div class="breath-step">
+            <span class="breath-duration">4s</span>
+            <span class="breath-action">Inhale</span>
+          </div>
+          <div class="breath-step">
+            <span class="breath-duration">4s</span>
+            <span class="breath-action">Hold</span>
+          </div>
+          <div class="breath-step">
+            <span class="breath-duration">4s</span>
+            <span class="breath-action">Exhale</span>
+          </div>
+          <div class="breath-step">
+            <span class="breath-duration">4s</span>
+            <span class="breath-action">Hold</span>
+          </div>
+        </div>
+
+        <div class="breathing-stats">
+          <span>Cycles completed: <strong id="breathingCycles">0</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Eye Care Tab -->
+    <section class="tab-content" id="eyecare">
+      <div class="page-header">
+        <h2>Eye Care</h2>
+        <p>Protect your eyes from screen strain. We blink 66% less when looking at screens.</p>
+      </div>
+
+      <!-- 20-20-20 Rule -->
+      <div class="feature-card">
+        <div class="card-header-row">
+          <div>
+            <h3>20-20-20 Rule</h3>
+            <p class="card-subtitle">Every 20 minutes, look at something 20 feet away for 20 seconds.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle2020">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Blink Reminder -->
+      <div class="feature-card">
+        <div class="card-header-row">
+          <div>
+            <h3>Blink Reminder</h3>
+            <p class="card-subtitle">Reminds you to consciously blink every 10 minutes.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleBlinkPage">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <p>Reduced blinking causes dry eyes and eye strain. Consciously blinking helps maintain eye moisture and comfort.</p>
+      </div>
+    </section>
+
+    <!-- Posture & Movement Tab -->
+    <section class="tab-content" id="posture">
+      <div class="page-header">
+        <h2>Posture & Movement</h2>
+        <p>Stay active and maintain good posture while working.</p>
+      </div>
+
+      <!-- Posture Reminder -->
+      <div class="feature-card">
+        <div class="card-header-row">
+          <div>
+            <h3>Posture Check</h3>
+            <p class="card-subtitle">Reminds you to straighten up and check your posture.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="togglePosturePage">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="interval-selector">
+          <label>Every:</label>
+          <select id="postureInterval">
+            <option value="10">10 min</option>
+            <option value="15" selected>15 min</option>
+            <option value="20">20 min</option>
+            <option value="30">30 min</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stand Up Reminder -->
+      <div class="feature-card">
+        <div class="card-header-row">
+          <div>
+            <h3>Stand Up & Move</h3>
+            <p class="card-subtitle">Reminds you to stand up and walk around.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleStandUpPage">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="interval-selector">
+          <label>Every:</label>
+          <select id="standUpInterval">
+            <option value="20">20 min</option>
+            <option value="30" selected>30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Desk Stretches -->
+      <div class="feature-card">
+        <div class="card-header-row">
+          <div>
+            <h3>Desk Stretches</h3>
+            <p class="card-subtitle">Get random stretch suggestions throughout the day.</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleStretchPage">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="interval-selector">
+          <label>Every:</label>
+          <select id="stretchInterval">
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60" selected>60 min</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="alert">
+    <svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <span id="toastMessage">Success!</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
