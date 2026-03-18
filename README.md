@@ -1,8 +1,7 @@
 # Nudge - Desktop Health Companion
 
 ## Live Demo
-The application is hosted on HuggingFace Spaces:
-**[https://huggingface.co/spaces/dewanjee/NeuroTab](https://swarup113.github.io/Nudge/)**
+**https://swarup113.github.io/Nudge/**
 
 ## Features
 
