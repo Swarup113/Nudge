@@ -106,8 +106,24 @@ navItems.forEach(item => {
         content.classList.add('active');
       }
     });
+
+    // Close mobile menu after selection
+    const mainNav = document.getElementById('mainNav');
+    if (mainNav && window.innerWidth <= 900) {
+      mainNav.classList.remove('active');
+    }
   });
 });
+
+// ==================== MOBILE MENU ====================
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mainNav = document.getElementById('mainNav');
+
+if (mobileMenuToggle && mainNav) {
+  mobileMenuToggle.addEventListener('click', () => {
+    mainNav.classList.toggle('active');
+  });
+}
 
 // ==================== NOTIFICATION PANEL ====================
 const notificationBtn = document.getElementById('notificationBtn');
