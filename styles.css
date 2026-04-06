@@ -1317,25 +1317,40 @@ input::placeholder {
 }
 
 /* ========== Footer ========== */
-.main-footer {
-  padding: 1.5rem;
+/* Centered Footer at the bottom */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 1rem;
   text-align: center;
-  border-top: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  border-top: 1px solid var(--border-color, #30363d);
+  background: var(--bg-secondary, #161b22);
+  color: var(--text-secondary, #8b949e);
+  font-size: 0.85rem;
+  z-index: 1000;
 }
 
-.author-link {
-  color: var(--accent);
+/* Forces the copyright paragraph to stay centered */
+.footer p {
+  margin: 0;
+}
+
+/* Your Name Link with #00d4aa teal color */
+.footer-link, 
+.footer-link:visited {
+  color: #00d4aa !important; /* Your specific teal */
   text-decoration: none;
   font-weight: 600;
-  transition: var(--transition);
+  transition: opacity 0.2s ease;
 }
 
-.author-link:hover {
+.footer-link:hover {
   text-decoration: underline;
-  color: var(--accent-hover);
+  opacity: 0.8;
+  color: #00d4aa !important; /* Keeps teal on hover */
 }
 
 /* ========== Toast ========== */
